@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+    <!--    Load CSS Style-->
+    <link rel= "stylesheet" type= "text/css" href= "{{url_for('static', filename='styles/test.css') }}">
+
+    <!--    Check the page title-->
+    {% if title %}
+        <title>Peach - {{ title }}</title>
+    {% else %}
+        <title>Peach</title>
+    {% endif %}
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="nav"></div>
+
+        <div class="main-area">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="sidebar"></div>
+        <div class="sidebar-bottom-logo"></div>
+        <div class="sidebar-top-logo"></div>
+        <div class="footer"></div>
+
+    </div>
+
+    <!--    Show flashed messages   -->
+    <div class="page-container">
+        <!--    Get flashed messages-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'fail' %}
+                <div class="alert alert-danger alter-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+
+            {% else %}
+                <div class="alert alert-success alter-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+
+            {% endif %}
+            {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+    </div>
+
+
+</body>
+</html>
