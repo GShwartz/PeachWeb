@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
-    <!--    Load CSS Style-->
-    <link rel= "stylesheet" type= "text/css" href= "{{url_for('static', filename='styles/test.css') }}">
-
     <!--    Check the page title-->
     {% if title %}
         <title>Peach - {{ title }}</title>
@@ -17,44 +14,30 @@
 </head>
 
 <body>
+    <!-- Main Frame -->
     <div class="container">
+        <!-- Top Nav Bar-->
         <div class="nav"></div>
 
+        <!-- Main Box-->
         <div class="main-area">
             {% block content %}
             {% endblock %}
         </div>
 
+        <!-- SideBar Menu -->
         <div class="sidebar"></div>
+
+        <!-- SideBar Bottom Logo-->
         <div class="sidebar-bottom-logo"></div>
+
+        <!--  SideBar Top Logo-->
         <div class="sidebar-top-logo"></div>
+
+        <!-- Footer -->
         <div class="footer"></div>
 
     </div>
-
-    <!--    Show flashed messages   -->
-    <div class="page-container">
-        <!--    Get flashed messages-->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-            {% if category == 'fail' %}
-                <div class="alert alert-danger alter-dismissible fade show" role="alert">
-                    {{ message }}
-                </div>
-
-            {% else %}
-                <div class="alert alert-success alter-dismissible fade show" role="alert">
-                    {{ message }}
-                </div>
-
-            {% endif %}
-            {% endfor %}
-
-        {% endif %}
-        {% endwith %}
-    </div>
-
 
 </body>
 </html>
