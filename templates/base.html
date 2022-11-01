@@ -17,7 +17,10 @@
     <!-- Main Frame -->
     <div class="container">
         <!-- Top Nav Bar-->
-        <div class="nav"></div>
+        <div class="nav">
+            {% block nav %}
+            {% endblock %}
+        </div>
 
         <!-- Main Box-->
         <div class="main-area">
@@ -26,7 +29,10 @@
         </div>
 
         <!-- SideBar Menu -->
-        <div class="sidebar"></div>
+        <div class="sidebar">
+            {% block sidebar %}
+            {% endblock %}
+        </div>
 
         <!-- SideBar Bottom Logo-->
         <div class="sidebar-bottom-logo"></div>
@@ -35,7 +41,10 @@
         <div class="sidebar-top-logo"></div>
 
         <!-- Footer -->
-        <div class="footer"></div>
+        <div class="footer">
+            {% block footer %}
+            {% endblock %}
+        </div>
 
     </div>
 
