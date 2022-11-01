@@ -1,4 +1,3 @@
-from flask import Flask, render_template, request, flash
 from datetime import datetime
 from termcolor import colored
 from threading import Thread
@@ -14,12 +13,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-# Database
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
-
 # Local Modules
 from Modules import screenshot
 from Modules import tasks
@@ -27,109 +20,17 @@ from Modules import vital_signs
 from Modules import sysinfo
 from Modules import freestyle
 
-# Testing ENV
-import random
-import string
-
 init()
 
 
-# app = Flask(__name__)
-# app.config['SECRET_KEY'] = "SuperSecretKey"
 app = FastAPI()
-app.mount("/templates", StaticFiles(directory="templates", html=True), name="templates")
 templates = Jinja2Templates(directory="templates")
-
-Base = declarative_base()
-
-
-# noinspection PyMissingConstructor
-class Person(Base):
-    __tablename__ = 'users'
-    pid = Column("id", Integer, primary_key=True)
-    firstName = Column("firstname", String)
-    email = Column("email", String)
-    password = Column("password", String)
-
-    def __init__(self, pid, fName, email, pword):
-        self.id = pid
-        self.firstName = fName
-        self.email = email
-        self.password = pword
-
-    def __repr__(self):
-        return f"({self.pid}) ({self.firstName}) ({self.email})"
 
 
 @app.get("/")
-async def home():
-    return templates.get_template("index")
-
-
-@app.route('/devices', methods=['GET', 'POST'])
-def devices():
-    return render_template('devices.html', title='Devices')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    data = request.form
-    print(data)
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        if len(email) < 4:
-            flash('Email must be legit bro.', category='fail')
-
-        elif len(password) < 7:
-            flash("Password too short.", category='fail')
-
-    return render_template('login.html', title='LogIn')
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    # Init DB for signup
-    ses = sessionmaker(bind=engine)
-    Session = ses
-    sess = Session()
-
-    if request.method == 'POST':
-        email = request.form.get('email')
-        emailExists = sess.query(Person).filter_by(email=f"{email}").scalar() is not None
-
-        firstName = request.form.get('firstName')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
-
-        if len(email) < 4:
-            flash('Email must be legit bro.', category='fail')
-
-        elif emailExists:
-            flash('Email exists bro.', category='fail')
-
-        elif len(firstName) < 2:
-            flash('Name must be legit bro.', category='fail')
-
-        elif password1 != password2:
-            flash("The passwords don't match dude!", category='fail')
-
-        elif len(password1) < 7:
-            flash("Password too short.", category='fail')
-
-        else:
-            person = Person(1, firstName, email, password2)
-            sess.add(person)
-            sess.commit()
-
-            flash("Account created!", category='win')
-            results = sess.query(Person).all()
-            print(results)
-
-            return render_template('about.html', title='About')
-
-    return render_template('signup.html', title='SignUp')
+@app.get("/home")
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 class Server:
@@ -1038,8 +939,3 @@ if __name__ == "__main__":
     path = r'c:\Peach'
     log_path = fr'{path}\server_log.txt'
 
-    engine = create_engine("sqlite:///peach.db", echo=True)
-    Base.metadata.create_all(bind=engine)
-
-    # while True:
-    app.run(debug=True)
